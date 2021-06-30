@@ -55,17 +55,17 @@ public class Game {
     }
 
     public void play() {
-        boolean playerBusted = playerTurn();
+        playerTurn();
 
-        dealerTurn(playerBusted);
+        dealerTurn();
 
         displayFinalGameState();
 
-        determineOutcome(playerBusted);
+        determineOutcome();
     }
 
-    private void determineOutcome(boolean playerBusted) {
-        if (playerBusted) {
+    private void determineOutcome() {
+        if (playerHand.isBusted()) {
             System.out.println("You Busted, so you lose.  💸");
         } else if (dealerHand.isBusted()) {
             System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
@@ -78,16 +78,16 @@ public class Game {
         }
     }
 
-    private void dealerTurn(boolean playerBusted) {
+    private void dealerTurn() {
         // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>=stand)
-        if (!playerBusted) {
+        if (!playerHand.isBusted()) {
             while (dealerHand.shouldDealerHit()) {
                 dealerHand.drawCardFrom(deck);
             }
         }
     }
 
-    private boolean playerTurn() {
+    private void playerTurn() {
         // get Player's decision: hit until they stand, then they're done (or they go bust)
         boolean playerBusted = false;
         while (!playerBusted) {
@@ -105,7 +105,6 @@ public class Game {
                 System.out.println("You need to [H]it or [S]tand");
             }
         }
-        return playerBusted;
     }
 
     private boolean playerChoseToHit(String playerChoice) {
